@@ -38,18 +38,7 @@ nav {
   background-color: blue;
   font-weight: bold;
 }
-.info {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  gap: 10px;
-}
-#errMsg {
-  color: red;
-  font-size: large;
-  font-weight: bold;
-}
+
 main {
   /* border: 1px solid; */
   margin: 0 15px;
