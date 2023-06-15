@@ -1,5 +1,11 @@
 $(document).ready(function () {
   checkbox();
+  window.addEventListener("resize", function () {
+    if ($(window).width() <= 980) {
+      $("#main").toggleClass("d-flex");
+      $("#main").addClass("text-center");
+    }
+  });
 
   $("#sub").click(() => {
     $("#cards").empty();
