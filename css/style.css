@@ -200,4 +200,7 @@ textarea {
     height: 55px;
     line-height: 55px;
   }
+  #main {
+    display: block;
+  }
 }
