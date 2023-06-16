@@ -1,105 +1,35 @@
 $(document).ready(function () {
-  checkbox();
-  window.addEventListener("resize", function () {
-    if ($(window).width() <= 980) {
-      $("#main").toggleClass("d-flex");
-      $("#main").addClass("text-center");
-    }
-  });
-
-  $("#sub").click(() => {
-    $("#cards").empty();
-    $.ajax({
-      type: "GET",
-      url: "../data/movies.json",
-      dataType: "json",
-      success: function (response) {
-        var found = false;
-        var errMsg = "";
-        $.each(response, (i, data) => {
-          let lst = getGenr();
-          let grs = data.genres;
-          if (lst.length == grs.length) {
-            if (JSON.stringify(lst) == JSON.stringify(grs)) {
-              found = true;
-              makeCard(data);
-              read();
-              imgErr();
-            }
-          }
-        });
-        if (!found) {
-          errMsg =
-            "<p id='errMsg'>WOW sorry not found try again or check what you choose ;)</p>";
-          $("#cards").append(errMsg);
-        }
+  $("#btn").click(() => {
+    $(".info").empty();
+    let inp = $("#txt").val().replace(" ", "%20");
+    const url = `https://api.themoviedb.org/3/search/keyword?query=${inp}&page=1`;
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
       },
-      error: function (err) {
-        console.log(err);
-      },
-    });
+    };
+    getApi(url, options);
   });
 });
-function read() {
-  $(".spn").each((il, el) => {
-    el.addEventListener("click", () => {
-      $("p").parent().toggleClass("para");
-    });
-  });
-}
-function getGenr() {
-  let boxs = $(".gr");
-  var val = [];
-  $(".gr:checked").each(function (i) {
-    val[i] = $(this).val();
-  });
-  return val;
-}
-function checkbox() {
-  $.ajax({
-    type: "GET",
-    url: "../data/genre.json",
-    dataType: "json",
-    success: function (response) {
-      $.each(response, (i, data) => {
-        let lbl = `<div class='form-check cbox '><input type="checkbox" name="genre" value="${data}" class="form-check-input gr" id="flexCheckChecked">
-        <label class="form-check-label" for="flexCheckChecked">${data}</label></div>`;
-        $("#container").append(lbl);
-      });
-    },
-  });
-}
 function makeCard(data) {
-  let card = "";
-  if (data.extract === undefined) {
-    card = `<div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="${data.thumbnail}" alt="1.jpg">
-    <div class="card-body">
-      <h5 class="card-title">${data.title}</h5>
-      <div class="para">
-        <p class="card-text">Not Found</p>
+  let card = `<div class="card mb-3 cls" >
+  <div class="row g-0">
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">${data.name}</h5>
+        <span class="card-text"><a href="https://www.imdb.com/title/tt${data.id}" target="_blank">more info</a></span>
       </div>
     </div>
-  </div>`;
+  </div>
+</div>`;
 
-    $("#cards").append(card);
-  } else {
-    card = `<div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="${data.thumbnail}" alt="1.jpg">
-    <div class="card-body">
-      <h5 class="card-title">${data.title}</h5>
-      <div class="para" id='pr'>
-        <p class="card-text"> ${data.extract}</p>
-      </div>
-      <span class="btn btn-primary spn" id="more"> Read more...</span>
-    </div>
-  </div>`;
-
-    $("#cards").append(card);
-  }
+  $(".info").append(card);
 }
 function imgErr() {
-  $(".card-img-top").each((il, el) => {
+  $(".rounded-start").each((il, el) => {
     el.addEventListener("error", function handleError() {
       const defaultImage = "../img/cover.jfif";
 
@@ -107,4 +37,21 @@ function imgErr() {
       el.alt = "default";
     });
   });
+}
+async function getApi(url, opt) {
+  const response = await fetch(url, opt);
+  let movie = await response.json();
+  let data = movie.results;
+  let errMsg = "";
+  if (data.length >= 1) {
+    data.forEach((e) => {
+      makeCard(e);
+      console.log(e);
+      imgErr();
+    });
+  } else {
+    errMsg =
+      "<p id='errMsg'>WOW sorry not found try again or check what you typed ;)</p>";
+    $(".info").append(errMsg);
+  }
 }
