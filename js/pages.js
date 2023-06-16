@@ -2,7 +2,7 @@ $(document).ready(function () {
   $("#btn").click(() => {
     $(".info").empty();
     let inp = $("#txt").val().replace(" ", "%20");
-    const url = `https://api.themoviedb.org/3/search/movie?query=${inp}&include_adult=false&language=en-US&page=2`;
+    const url = `https://api.themoviedb.org/3/search/movie?query=${inp}&include_adult=false&language=en-US&page=1`;
     const options = {
       method: "GET",
       headers: {
