@@ -4,7 +4,8 @@ nav {
   margin-bottom: 0;
   background-color: #eee;
 }
-#container {
+#container,
+#container_1 {
   margin: 11px;
   display: flex;
   flex-wrap: wrap;
@@ -12,7 +13,9 @@ nav {
   border: 1px solid;
   border-radius: 15px;
   box-shadow: 5px 10px #888888;
+  margin-top: 15px;
 }
+
 .cbox {
   margin: 5px;
 }
