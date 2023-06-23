@@ -22,6 +22,44 @@
             font-size: large;
             font-weight: bold;
         }
+
+        .keys {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 15px;
+        }
+
+        .key {
+            padding: 5px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .key ::after {
+            content: "";
+            right: -1px;
+            margin: 0px;
+            top: 10px;
+            border: 1px solid;
+            position: absolute;
+            height: 16px;
+            display: block;
+            width: 0px;
+
+        }
+
+        span {
+            font-style: oblique;
+            border: none;
+            transition: 0.5ms;
+            cursor: pointer;
+        }
+
+        span:hover {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -67,8 +105,9 @@
             <button class="btn btn-outline-secondary" type="button" id="btn">go</button>
         </div>
     </div>
+    <div class="keys"></div>
     <div class="info"></div>
-
+    <div></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
