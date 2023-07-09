@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("#txt").keyup(function (e) {
     $(".keys").empty();
-    let strt = $("#txt").val();
+    let strt = $("#txt").val().replace(" ", "+");
     do {
       if (strt == "") return;
       const url1 = `https://api.themoviedb.org/3/search/keyword?query=${strt}&language=en-US&page=1`;
@@ -10,14 +10,16 @@ $(document).ready(function () {
         headers: {
           accept: "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
         },
       };
+
       getKey(url1, options1);
     } while (false);
   });
   $("#btn").click(() => {
     $(".info").empty();
+    $(".corr").empty();
     let inp = $("#txt").val().replace(" ", "%20");
     const url = `https://api.themoviedb.org/3/search/movie?query=${inp}&include_adult=false&language=en-US&page=1`;
     const options = {
@@ -28,6 +30,15 @@ $(document).ready(function () {
           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
       },
     };
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        apikey :"eZkdD4rr8KWHzDD7fuwaV97WowyJA97C",
+      }
+    };
+    const urlSpl=`https://api.apilayer.com/spell/spellchecker?q=${inp}`;
+    spellCheck(urlSpl,requestOptions);
     getApi(url, options);
   });
 });
@@ -68,10 +79,11 @@ async function getApi(url, opt) {
       makeCard(e);
       imgErr();
     });
+    
   } else {
     errMsg =
-      "<p id='errMsg'>WOW sorry not found try again or check what you typed ;)</p>";
-    $(".info").append(errMsg);
+            "<p id='errMsg'>WOW sorry not found try again or check what you typed ;)</p>";
+      $(".info").append(errMsg);
   }
 }
 async function getKey(url, opt) {
@@ -83,7 +95,7 @@ async function getKey(url, opt) {
     data.forEach((e) => {
       // makeCard(e);
       $(".keys").append(
-        `<div class="key"><span onclick="fun(this)">${e.name}</span></div>`
+        `<div class="key"><span onclick="insert(this)">${e.name}</span></div>`
       );
       // imgErr();
     });
@@ -93,6 +105,24 @@ async function getKey(url, opt) {
     $(".keys").append(errMsg);
   }
 }
-function fun(e) {
+async function spellCheck(url,opt){
+  const response= await fetch(url,opt);
+  let spell= await response.json();
+  let correction=$(".corr");
+  if (spell.corrections.length != 0){
+    correction.append("<p>did you mean :</p>")
+    spell.corrections.forEach(e=>{
+      e.candidates.forEach(el=>{
+        let exp=`<div class="mea">${el};</div>`;
+        correction.append(exp);
+      })
+    })
+    return true;
+  }else{
+    return false;
+  }
+}
+function insert(e) {
   $("#txt").val(e.innerHTML);
 }
+
