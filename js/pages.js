@@ -10,7 +10,7 @@ $(document).ready(function () {
         headers: {
           accept: "application/json",
           Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTY3NmRlOWI0YTAzYTdlOGQ0ODZjNTY3MWQ2N2UyNCIsInN1YiI6IjY0NDU3NzQzYWQ4N2Y3MTc2YTcyNzRjYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vQ0wTEOjweUUodHiy9LNTnkC0iwgnWzKofNhCbJ3R1M",
         },
       };
 
@@ -18,6 +18,7 @@ $(document).ready(function () {
     } while (false);
   });
   $("#btn").click(() => {
+    // new
     $(".info").empty();
     $(".corr").empty();
     let inp = $("#txt").val().replace(" ", "%20");
@@ -31,14 +32,14 @@ $(document).ready(function () {
       },
     };
     const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
+      method: "GET",
+      redirect: "follow",
       headers: {
-        apikey :"eZkdD4rr8KWHzDD7fuwaV97WowyJA97C",
-      }
+        apikey: "eZkdD4rr8KWHzDD7fuwaV97WowyJA97C",
+      },
     };
-    const urlSpl=`https://api.apilayer.com/spell/spellchecker?q=${inp}`;
-    spellCheck(urlSpl,requestOptions);
+    const urlSpl = `https://api.apilayer.com/spell/spellchecker?q=${inp}`;
+    spellCheck(urlSpl, requestOptions);
     getApi(url, options);
   });
 });
@@ -79,11 +80,10 @@ async function getApi(url, opt) {
       makeCard(e);
       imgErr();
     });
-    
   } else {
     errMsg =
-            "<p id='errMsg'>WOW sorry not found try again or check what you typed ;)</p>";
-      $(".info").append(errMsg);
+      "<p id='errMsg'>WOW sorry not found try again or check what you typed ;)</p>";
+    $(".info").append(errMsg);
   }
 }
 async function getKey(url, opt) {
@@ -105,24 +105,23 @@ async function getKey(url, opt) {
     $(".keys").append(errMsg);
   }
 }
-async function spellCheck(url,opt){
-  const response= await fetch(url,opt);
-  let spell= await response.json();
-  let correction=$(".corr");
-  if (spell.corrections.length != 0){
-    correction.append("<p>did you mean :</p>")
-    spell.corrections.forEach(e=>{
-      e.candidates.forEach(el=>{
-        let exp=`<div class="mea">${el};</div>`;
+async function spellCheck(url, opt) {
+  const response = await fetch(url, opt);
+  let spell = await response.json();
+  let correction = $(".corr");
+  if (spell.corrections.length != 0) {
+    correction.append("<p>did you mean :</p>");
+    spell.corrections.forEach((e) => {
+      e.candidates.forEach((el) => {
+        let exp = `<div class="mea">${el};</div>`;
         correction.append(exp);
-      })
-    })
+      });
+    });
     return true;
-  }else{
+  } else {
     return false;
   }
 }
 function insert(e) {
   $("#txt").val(e.innerHTML);
 }
-
